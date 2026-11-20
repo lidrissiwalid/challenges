@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% set registering = mode == 'register' %}
+{% block crumb %}{{ 'Create account' if registering else 'Sign in' }}{% endblock %}
+{% block content %}
+<section class="auth-wrap">
+  <div class="auth-art" aria-hidden="true"><div class="art-letter"><i class="art-stamp"></i><i class="address"></i></div><div class="art-envelope"></div></div>
+  <div class="auth-body">
+    <h1>{{ 'Create an account' if registering else 'Sign in to Zimbra' }}</h1>
+    <p class="intro">{{ 'Choose a username and password for this local mail simulator.' if registering else 'Use your local simulator account to open your mailbox.' }}</p>
+    <form class="form" method="post">
+      <input type="hidden" name="csrf" value="{{ csrf }}">
+      <label>Username<input name="username" minlength="3" maxlength="32" autocomplete="username" required></label>
+      <label>Password<input name="password" type="password" minlength="8" autocomplete="{{ 'new-password' if registering else 'current-password' }}" required></label>
+      <button class="button">{{ 'Create account' if registering else 'Sign in' }}</button>
+    </form>
+    <p class="small">{% if registering %}Already have an account? <a href="{{ url_for('login') }}">Sign in</a>{% else %}New to Zimbra? <a href="{{ url_for('register') }}">Create an account</a>{% endif %}</p>
+  </div>
+</section>
+{% endblock %}

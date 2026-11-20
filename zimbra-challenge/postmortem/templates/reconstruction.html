@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block crumb %}Recovery REC-{{ '%04d' | format(job.id) }}{% endblock %}
+{% block content %}
+<a class="back" href="{{ url_for('reconstructions') }}">← Recovery ledger</a>
+<h1>{{ job.subject }}</h1>
+<div class="meta"><span>Original <a href="{{ url_for('message', message_id=job.message_id) }}">PM-{{ '%04d' | format(job.message_id) }}</a></span><span>{{ job.created_at }}</span><span class="badge {{ job.status }}">{{ job.status | upper }}</span></div>
+<section class="paper letter"><div class="letter-top">Recovered message <span>REC-{{ '%04d' | format(job.id) }} · Archival copy</span></div><pre>{{ job.output }}</pre></section>
+<aside class="archive-tip"><h2>Legacy typesetting</h2><p>Recovered copies are generated from the original message source by the legacy typesetting engine. Rejected records remain in the ledger for audit.</p></aside>
+{% endblock %}

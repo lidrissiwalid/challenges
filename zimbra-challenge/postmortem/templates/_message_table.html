@@ -1,0 +1,14 @@
+<div class="table-wrap"><table>
+  <thead><tr><th>{{ 'From' if folder == 'inbox' else 'To' }}</th><th>Subject</th><th>Date</th></tr></thead>
+  <tbody>
+    {% for item in messages %}
+      <tr>
+        <td>{{ item.sender ~ '@' ~ mail_domain if folder == 'inbox' else item.recipient or 'No recipient' }}</td>
+        <td><a class="subject" href="{{ url_for('received' if folder == 'inbox' else 'message', message_id=item.id) }}">{{ item.subject or '(No subject)' }}</a></td>
+        <td>{{ item.created_at }}</td>
+      </tr>
+    {% else %}
+      <tr><td colspan="3" class="empty">No messages in {{ 'the Dead Letter Office' if folder == 'dead_letters' else folder | title }}.</td></tr>
+    {% endfor %}
+  </tbody>
+</table></div>

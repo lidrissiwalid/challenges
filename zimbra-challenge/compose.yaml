@@ -1,0 +1,52 @@
+services:
+  web:
+    build: .
+    environment:
+      DATABASE: /data/postmortem.db
+      INSPECTION_CODE: ${INSPECTION_CODE:?Set INSPECTION_CODE in .env before starting}
+    networks:
+      - mailbox
+    volumes:
+      - archive_data:/data
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=16m
+  gateway:
+    image: caddy:2-alpine
+    entrypoint: ["caddy"]
+    command: ["reverse-proxy", "--from", ":8080", "--to", "web:8000"]
+    ports:
+      - "127.0.0.1:8000:8080"
+    networks:
+      - frontend
+      - mailbox
+    depends_on:
+      - web
+    restart: unless-stopped
+    user: "10001:10001"
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      XDG_CONFIG_HOME: /tmp/config
+      XDG_DATA_HOME: /tmp/data
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=16m
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8080/login"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+      start_period: 10s
+
+volumes:
+  archive_data:
+networks:
+  frontend: {}
+  mailbox:
+    internal: true

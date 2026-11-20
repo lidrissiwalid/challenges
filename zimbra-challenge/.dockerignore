@@ -1,0 +1,15 @@
+__pycache__
+.pytest_cache
+.venv
+*.db
+*.secret
+tests
+docs
+.git
+postmortem/recovery.py
+
+.env
+.env.*
+*.db-*
+*.sqlite*
+*.zip

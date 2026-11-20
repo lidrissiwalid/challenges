@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block crumb %}Recovery ledger{% endblock %}
+{% block content %}
+<h1>Recovery ledger</h1>
+<p class="intro">Each reconstruction is saved as a separate record.</p>
+<div class="table-wrap"><table>
+  <thead><tr><th>Job</th><th>Subject</th><th>Date</th><th>Result</th></tr></thead>
+  <tbody>
+    {% for job in jobs %}
+      <tr><td class="mono">REC-{{ '%04d' | format(job.id) }}</td>
+        <td><a class="subject" href="{{ url_for('reconstruction', job_id=job.id) }}">{{ job.subject }}</a></td>
+        <td>{{ job.created_at }}</td><td><span class="badge {{ job.status }}">{{ job.status | upper }}</span></td></tr>
+    {% else %}<tr><td class="empty" colspan="4">No recovery records yet.</td></tr>{% endfor %}
+  </tbody>
+</table></div>
+{% endblock %}

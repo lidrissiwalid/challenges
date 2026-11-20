@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block crumb %}{{ 'Dead Letter Office' if folder == 'dead_letters' else folder | title }}{% endblock %}
+{% block content %}
+<h1>{{ self.crumb() }}</h1>
+{% if folder == 'drafts' %}<p class="intro"><a href="{{ url_for('dead_letters') }}">Open Dead Letter Office</a></p>{% endif %}
+{% include '_message_table.html' %}
+{% endblock %}

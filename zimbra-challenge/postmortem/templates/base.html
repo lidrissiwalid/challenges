@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#007bbb">
+  <title>{% block crumb %}Mail{% endblock %} · Zimbra</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="app-header">
+    <a class="brand" href="{{ url_for('index') }}" aria-label="Zimbra home"><i class="envelope" aria-hidden="true"></i>Zimbra</a>
+    <span class="app-name">Mail</span>
+    <div class="account">
+      {% if username %}
+        <span class="identity">{{ username }}@{{ mail_domain }}</span>
+        <form method="post" action="{{ url_for('logout') }}">
+          <input type="hidden" name="csrf" value="{{ csrf }}">
+          <button class="sign-out">Sign out</button>
+        </form>
+      {% else %}<span>Local mail simulator</span>{% endif %}
+    </div>
+  </header>
+  <div class="{{ 'shell' if username else 'guest-shell' }}">
+    {% if username %}
+      {% set page = request.endpoint %}
+      {% set active = folder|default(page) %}
+      <aside class="sidebar">
+        <a class="button compose-link" href="{{ url_for('compose') }}" {% if page == 'compose' %}aria-current="page"{% endif %}><span aria-hidden="true">＋</span> New message</a>
+        <nav aria-label="Mail folders">
+          <h2>Mail folders</h2>
+          {% for endpoint, label, icon in [('inbox', 'Inbox', 'inbox'), ('sent', 'Sent', 'mail'), ('drafts', 'Drafts', 'folder')] %}
+            <a href="{{ url_for(endpoint) }}" {% if active == endpoint %}aria-current="{{ 'page' if page == endpoint else 'location' }}"{% endif %}>
+              <i class="nav-icon icon-{{ icon }}" aria-hidden="true"></i>{{ label }}
+            </a>
+          {% endfor %}
+        </nav>
+      </aside>
+    {% endif %}
+    <main>
+      {% with alerts = get_flashed_messages(with_categories=true) %}
+        {% for category, alert in alerts %}<div class="notice {{ category }}" role="status">{{ alert }}</div>{% endfor %}
+      {% endwith %}
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+</body>
+</html>
