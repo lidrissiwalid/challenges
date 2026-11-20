@@ -1,0 +1,23 @@
+{
+  "name": "geosupport-tests",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "test": "npm run build && node --test dist/*.test.js",
+    "test:chain": "npm run build && node --test dist/attack-chain.test.js",
+    "test:auth": "npm run build && node --test dist/authentication.test.js",
+    "test:authz": "npm run build && node --test dist/authorization.test.js",
+    "test:xss": "npm run build && node --test dist/xss.test.js",
+    "test:ssrf": "npm run build && node --test dist/ssrf.test.js",
+    "test:network": "npm run build && node --test dist/network-isolation.test.js"
+  },
+  "dependencies": {
+    "node-fetch": "^2.7.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.9.0",
+    "@types/node-fetch": "^2.6.11",
+    "typescript": "^5.6.3"
+  }
+}

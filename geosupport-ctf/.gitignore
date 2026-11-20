@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.env
+*.log
+*.secret
+secrets/
+.DS_Store
+*.js.map
+coverage/
+tests/dist/
